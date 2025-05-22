@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
+	populateNavbar(["Assets", "Changes"]);
+
 	const params = new URLSearchParams(window.location.search);
 	const datapath = "/data/" + params.get("data") + "/";
 
@@ -30,7 +32,26 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function getNestedValue(obj, path) {
-	return path.split('.').reduce((acc, key) => acc?.[key], obj);
+	value = path.split('.').reduce((acc, key) => acc?.[key], obj);
+	if (value) return value;
+	else return "";
+}
+
+function searchString(string, search) {
+	return string.toLowerCase().match(search.toLowerCase());
+}
+
+function populateNavbar(directories) {
+	const navbarUl = document.getElementById("nav-links");
+
+	directories.forEach(directory => {
+		const li = document.createElement("li");
+		const a = document.createElement("a")
+		a.innerHTML = directory;
+		a.href = `?data=${directory}`
+		li.appendChild(a);
+		navbarUl.appendChild(li);
+	});
 }
 
 function populateTableHeader(fields) {
@@ -65,7 +86,7 @@ function populateTable(data, fields) {
 			for (let i = 0; i < fields.length; i++) {
 				const string = String(getNestedValue(item, fields[i]));
 				const regex = String(document.getElementById(fields[i]).value);
-				if (string.match(regex) == null) return false;
+				if (!searchString(string, regex)) return false;
 			}
 			return true;
 		})()) {
