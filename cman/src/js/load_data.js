@@ -93,7 +93,9 @@ function populateTable(data, fields) {
 
 	
 
-	data.forEach(item => {
+	for (const key in data) {
+		item = data[key];
+		item["id"] = key;
 		if ((() => {
 			for (let i = 0; i < fields.length; i++) {
 				const string = String(getNestedValue(item, fields[i]));
@@ -110,6 +112,6 @@ function populateTable(data, fields) {
 			});
 			tableBody.appendChild(row);
 		}
-	});
+	}
 }
 
