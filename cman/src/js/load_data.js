@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		})
 		.then(data => {
 			window.data = data;
-			populateTable(data, fields, null);
+			populateTable(data, fields);
 		})
 		.catch(error => {
 			console.log("Failed to populate table:", error);
@@ -46,19 +46,29 @@ function populateTableHeader(fields) {
 		const colSearchInput = document.createElement("input");
 		colSearchInput.id = field;
 
-		colSearchInput.addEventListener("input", function() {populateTable(data, header, [event.target.id, event.target.value])});
+		colSearchInput.addEventListener("input", function() {populateTable(data, header)});
 
 		colSearchTd.appendChild(colSearchInput);
 		tableSearch.appendChild(colSearchTd);
 	});
 }
 
-function populateTable(data, fields, filter) {
+
+function populateTable(data, fields) {
 	const tableBody = document.getElementById("data-table").tBodies[0];
 	tableBody.innerHTML = "";
 
+	
+
 	data.forEach(item => {
-		if (filter == null || String(getNestedValue(item, filter[0])).match(filter[1])) {
+		if ((() => {
+			for (let i = 0; i < fields.length; i++) {
+				const string = String(getNestedValue(item, fields[i]));
+				const regex = String(document.getElementById(fields[i]).value);
+				if (string.match(regex) == null) return false;
+			}
+			return true;
+		})()) {
 			const row = document.createElement("tr");
 			fields.forEach(field => {
 				const value = getNestedValue(item, field);
