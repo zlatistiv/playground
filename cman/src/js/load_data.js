@@ -91,8 +91,6 @@ function populateTable(data, fields) {
 	const tableBody = document.getElementById("data-table").tBodies[0];
 	tableBody.innerHTML = "";
 
-	
-
 	for (const key in data) {
 		item = data[key];
 		item["id"] = key;
