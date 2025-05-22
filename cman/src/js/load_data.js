@@ -1,5 +1,17 @@
 document.addEventListener("DOMContentLoaded", function() {
-	populateNavbar(["Assets", "Changes"]);
+	fetch("/data/directories.json")
+	.then(response => {
+		if (!response.ok) {
+			throw new Error("Failed to load data directory list");
+		}
+		return response.json();
+	})
+	.then(directories => {
+		populateNavbar(directories);
+	})
+	.catch(error => {
+		console.log("Failed to fetch data:", error);
+	});
 
 	const params = new URLSearchParams(window.location.search);
 	const datapath = "/data/" + params.get("data") + "/";
@@ -26,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			populateTable(data, fields);
 		})
 		.catch(error => {
-			console.log("Failed to populate table:", error);
+			console.log("Failed to fetch data:", error);
 		});
 	});
 });
