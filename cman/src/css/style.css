@@ -61,7 +61,7 @@ body {
 	width: 100%;
 	max-width: 100%;
 	overflow-x: auto;
-	margin: 1%;
+	margin: 0 auto;
 	padding: 0 1rem;
 	font-size: 12px;
 }
